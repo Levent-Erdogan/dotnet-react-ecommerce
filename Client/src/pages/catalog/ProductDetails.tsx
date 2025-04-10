@@ -1,15 +1,23 @@
-import { CircularProgress, Divider, Grid2, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Button, CircularProgress, Divider, Grid2, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { IProduct } from "../../model/IProduct";
 import requests from "../../api/requests";
 import NotFound from "../../errors/NotFound";
+import { AddShoppingCart } from "@mui/icons-material";
+import { useCartContext } from "../../context/CartContext";
+import { toast } from "react-toastify";
 
 export default function ProductDetailsPage() {
+
+    const { cart, setCart } = useCartContext();
 
     const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<IProduct | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isAdded, setisAdded] = useState(false);
+
+    const item = cart?.cartItems.find(i => i.productId == product?.id)
 
     useEffect(() => {
         id && requests.Catalog.details(parseInt(id))
@@ -18,9 +26,22 @@ export default function ProductDetailsPage() {
             .finally(() => setLoading(false))
     }, [id]);
 
+    function handleAddItem(id: number) {
+        setisAdded(true);
+
+        requests.Cart.addItem(id)
+            .then(cart => {
+                setCart(cart)
+                toast.success("Sepetinize eklendi")
+            })
+            .catch(error => console.log(error))
+            .finally(() => setisAdded(false));
+
+    }
+
     if (loading) return <CircularProgress />
 
-    if (!product) return <NotFound/>
+    if (!product) return <NotFound />
 
     return (
         <Grid2 container spacing={6}>
@@ -51,6 +72,16 @@ export default function ProductDetailsPage() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <Stack direction="row" sx={{mt:3}} alignItems="center" spacing={2}>
+                    <Button loading={isAdded} variant="outlined" loadingPosition="start" startIcon={<AddShoppingCart />} onClick={() => handleAddItem(product.id)}>
+                        Sepete Ekle
+                    </Button>
+
+                    {item?.quantity! > 0 && (
+                        <Typography variant="body2"> Sepetinize {item?.quantity} adet eklendi</Typography>
+                    )}
+                </Stack>
             </Grid2>
         </Grid2>
     )

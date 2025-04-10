@@ -3,6 +3,7 @@ import { AddCircleOutline, Delete, RemoveCircleOutline } from "@mui/icons-materi
 import { useCartContext } from "../../context/CartContext";
 import { useState } from "react";
 import requests from "../../api/requests";
+import { toast } from "react-toastify";
 
 export default function ShoppingCartPage() {
 
@@ -67,7 +68,10 @@ export default function ShoppingCartPage() {
                             </TableCell>
                             <TableCell align="right">{item.price * item.quantity} ₺</TableCell>
                             <TableCell align="right">
-                                <Button color="error" loading={status.loading && status.id==="del_all" + item.productId} onClick={() => handleDeleteItem(item.productId,"del_all" + item.productId, item.quantity)}>
+                                <Button color="error" loading={status.loading && status.id==="del_all" + item.productId} onClick={() => {
+                                    handleDeleteItem(item.productId,"del_all" + item.productId, item.quantity)
+                                    toast.error("Sepetinizden silindi")
+                                    }}>
                                     <Delete />
                                 </Button>
                             </TableCell>
