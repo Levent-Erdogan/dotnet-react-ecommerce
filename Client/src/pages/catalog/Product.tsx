@@ -7,6 +7,7 @@ import { useState } from "react";
 import requests from "../../api/requests";
 import { useCartContext } from "../../context/CartContext";
 import { toast } from "react-toastify";
+import { currentTRY } from "../../utils/FormatCurrency";
 
 interface Props {
   product: IProduct
@@ -38,7 +39,7 @@ export default function Product({ product }: Props) {
           {product.name}
         </Typography>
         <Typography variant="body2" color="secondary">
-          {(product.price / 100).toFixed(2)} ₺
+          {currentTRY.format(product.price)}
         </Typography>
       </CardContent>
       <CardActions>

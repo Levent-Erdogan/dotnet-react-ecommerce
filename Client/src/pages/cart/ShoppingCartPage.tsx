@@ -4,6 +4,8 @@ import { useCartContext } from "../../context/CartContext";
 import { useState } from "react";
 import requests from "../../api/requests";
 import { toast } from "react-toastify";
+import CartSummary from "./CartSummary";
+import { currentTRY } from "../../utils/FormatCurrency";
 
 export default function ShoppingCartPage() {
 
@@ -56,7 +58,7 @@ export default function ShoppingCartPage() {
                             <TableCell component="th" scope="row">
                                 {item.name}
                             </TableCell>
-                            <TableCell align="right">{item.price} ₺</TableCell>
+                            <TableCell align="right">{currentTRY.format(item.price)} ₺</TableCell>
                             <TableCell align="right">
                                 <Button loading={status.loading && status.id==="add" + item.productId} onClick={() => handleAddItem(item.productId, "add" + item.productId)}>
                                     <AddCircleOutline />
@@ -66,7 +68,7 @@ export default function ShoppingCartPage() {
                                     <RemoveCircleOutline />
                                 </Button>
                             </TableCell>
-                            <TableCell align="right">{item.price * item.quantity} ₺</TableCell>
+                            <TableCell align="right">{currentTRY.format(item.price * item.quantity)} ₺</TableCell>
                             <TableCell align="right">
                                 <Button color="error" loading={status.loading && status.id==="del_all" + item.productId} onClick={() => {
                                     handleDeleteItem(item.productId,"del_all" + item.productId, item.quantity)
@@ -77,6 +79,7 @@ export default function ShoppingCartPage() {
                             </TableCell>
                         </TableRow>
                     ))}
+                    <CartSummary/>
                 </TableBody>
             </Table>
         </TableContainer>

@@ -7,6 +7,7 @@ import NotFound from "../../errors/NotFound";
 import { AddShoppingCart } from "@mui/icons-material";
 import { useCartContext } from "../../context/CartContext";
 import { toast } from "react-toastify";
+import { currentTRY } from "../../utils/FormatCurrency";
 
 export default function ProductDetailsPage() {
 
@@ -52,7 +53,7 @@ export default function ProductDetailsPage() {
                 <Typography variant="h3"> {product.name}</Typography>
                 <Divider sx={{ mb: 2 }} />
                 <Typography variant="h4" color="secondary">
-                    {(product.price / 100).toFixed(2)} ₺
+                    {currentTRY.format(product.price) }
                 </Typography>
                 <TableContainer>
                     <Table>
