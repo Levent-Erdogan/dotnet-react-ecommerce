@@ -7,7 +7,7 @@ import { useState } from "react";
 import requests from "../../api/requests";
 import { useCartContext } from "../../context/CartContext";
 import { toast } from "react-toastify";
-import { currentTRY } from "../../utils/FormatCurrency";
+import { currentTRY } from "../../utils/formatCurrency";
 
 interface Props {
   product: IProduct

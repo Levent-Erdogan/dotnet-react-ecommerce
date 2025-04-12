@@ -7,7 +7,7 @@ import NotFound from "../../errors/NotFound";
 import { AddShoppingCart } from "@mui/icons-material";
 import { useCartContext } from "../../context/CartContext";
 import { toast } from "react-toastify";
-import { currentTRY } from "../../utils/FormatCurrency";
+import { currentTRY } from "../../utils/formatCurrency";
 
 export default function ProductDetailsPage() {
 

@@ -5,7 +5,7 @@ import { useState } from "react";
 import requests from "../../api/requests";
 import { toast } from "react-toastify";
 import CartSummary from "./CartSummary";
-import { currentTRY } from "../../utils/FormatCurrency";
+import { currentTRY } from "../../utils/formatCurrency";
 
 export default function ShoppingCartPage() {
 

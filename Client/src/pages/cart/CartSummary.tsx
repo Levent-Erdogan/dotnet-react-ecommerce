@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@mui/material";
 import { useCartContext } from "../../context/CartContext";
-import { currentTRY } from "../../utils/FormatCurrency";
+import { currentTRY } from "../../utils/formatCurrency";
 
 export default function CartSummary() {
 
