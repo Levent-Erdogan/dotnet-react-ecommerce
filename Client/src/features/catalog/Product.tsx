@@ -3,11 +3,9 @@ import { IProduct } from "../../model/IProduct";
 import { AddShoppingCart } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router";
-import { useState } from "react";
-import requests from "../../api/requests";
-import { useCartContext } from "../../context/CartContext";
-import { toast } from "react-toastify";
 import { currentTRY } from "../../utils/formatCurrency";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { addItemToCart } from "../cart/CartSlice";
 
 interface Props {
   product: IProduct
@@ -15,21 +13,8 @@ interface Props {
 
 export default function Product({ product }: Props) {
 
-  const [loading, setLoading] = useState(false);
-  const { setCart } = useCartContext();
-
-  function handleAddItem(productId: number) {
-
-    setLoading(true);
-
-    requests.Cart.addItem(productId)
-      .then(cart => {
-        setCart(cart)
-        toast.success("Sepetinize eklendi")
-      })
-      .catch(error => console.log(error))
-      .finally(() => setLoading(false));
-  }
+  const {status} = useAppSelector(state=>state.cart);
+     const dispatch = useAppDispatch();
 
   return (
     <Card>
@@ -43,8 +28,8 @@ export default function Product({ product }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button loading={loading} loadingPosition="start" variant="outlined" size="small" startIcon={<AddShoppingCart></AddShoppingCart>} color="success"
-          onClick={() => handleAddItem(product.id)}> Sepete Ekle</Button>
+        <Button loading={status==="pendingAddItem" + product.id} loadingPosition="start" variant="outlined" size="small" startIcon={<AddShoppingCart></AddShoppingCart>} color="success"
+          onClick={() => dispatch(addItemToCart({productId:product.id}))}> Sepete Ekle</Button>
 
         <Button component={Link} to={`/catalog/${product.id}`} variant="outlined" size="small" startIcon={<SearchIcon></SearchIcon>} color="primary"> View</Button>
       </CardActions>

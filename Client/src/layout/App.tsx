@@ -6,16 +6,19 @@ import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import requests from "../api/requests";
-import { useCartContext } from "../context/CartContext";
+import { useAppDispatch } from "../hooks/hooks";
+import { setCart } from "../features/cart/CartSlice";
 
 function App() {
+  //state'e ulaşmak için useAppSelector() 
+  //methodlara ulaşmak için useAppDispatch() 
 
-  const { setCart } = useCartContext()
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     requests.Cart.get()
-      .then(cart => setCart(cart))
+      .then(cart => dispatch(setCart(cart)))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
   }, [])
