@@ -1,8 +1,6 @@
-﻿using API.Entity;
-
-namespace API.Dto
+﻿namespace API.Dto
 {
-    public class CartDto
+    public class CartDTO
     {
         public int CartId { get; set; }
         public string? CustomerId { get; set; }
