@@ -24,7 +24,7 @@ export const addItemToCart = createAsyncThunk<Cart, { productId: number, quantit
     }
 );
 
-export const deleteItemFromCart = createAsyncThunk<Cart, { productId: number, quantity?: number,key?:string }>(
+export const deleteItemFromCart = createAsyncThunk<Cart, { productId: number, quantity?: number, key?: string }>(
     "cart/deleteItemFromCart",
     async ({ productId, quantity = 1 }) => {
         try {
@@ -37,12 +37,29 @@ export const deleteItemFromCart = createAsyncThunk<Cart, { productId: number, qu
 );
 
 
+export const getCart = createAsyncThunk<Cart>
+    (
+        "cart/getCart",
+        async (_, thunkAPI) => {
+            try {
+                return await requests.Cart.get();
+
+            } catch (error: any) {
+                return thunkAPI.rejectWithValue({ error: error.data })
+            }
+        }
+    )
+
+
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
         setCart: (state, action) => {
             state.cart = action.payload
+        },
+        clearCart:(state) =>{
+            state.cart =null;
         }
     },
     extraReducers: (builder) => {
@@ -63,7 +80,7 @@ export const cartSlice = createSlice({
 
         builder.addCase(deleteItemFromCart.pending, (state, action) => {
             console.log(action);
-            state.status = "pendingDeleteItem"+ action.meta.arg.productId + action.meta.arg.key;
+            state.status = "pendingDeleteItem" + action.meta.arg.productId + action.meta.arg.key;
         });
 
         builder.addCase(deleteItemFromCart.fulfilled, (state, action) => {
@@ -74,9 +91,17 @@ export const cartSlice = createSlice({
         builder.addCase(deleteItemFromCart.rejected, (state) => {
             state.status = "idle";
         });
+
+        builder.addCase(getCart.fulfilled, (state, action) => {
+            state.cart = action.payload;
+        });
+
+        builder.addCase(getCart.rejected, (_,action) => {
+            console.log(action.payload)
+        });
     }
 }
 )
 
 
-export const { setCart } = cartSlice.actions;
+export const { setCart ,clearCart} = cartSlice.actions;

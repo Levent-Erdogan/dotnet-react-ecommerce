@@ -2,8 +2,8 @@ import { Alert, Button, Paper, Table, TableBody, TableCell, TableContainer, Tabl
 import { AddCircleOutline, Delete, RemoveCircleOutline } from "@mui/icons-material";
 import CartSummary from "./CartSummary";
 import { currentTRY } from "../../utils/formatCurrency";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { addItemToCart, deleteItemFromCart } from "./CartSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 
 export default function ShoppingCartPage() {
 
