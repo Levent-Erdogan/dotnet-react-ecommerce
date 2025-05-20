@@ -1,9 +1,10 @@
-import { ShoppingCart } from "@mui/icons-material";
-import { AppBar, Badge, Box, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { KeyboardArrowDown, ShoppingCart } from "@mui/icons-material";
+import { AppBar, Badge, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
 import { Link, NavLink } from "react-router";
 import { logout } from "../features/account/AccountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { clearCart } from "../features/cart/CartSlice";
+import React, { useState } from "react";
 
 const links = [
   { title: "Home", to: "/" },
@@ -36,12 +37,25 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const itemCount = cart?.cartItems.reduce((total, item) => total + item.quantity, 0)
 
+
+  const [anchorEl,setAnchorEl] = useState<null |HTMLElement>(null) ;
+  const open = Boolean(anchorEl);
+
+  function handleMenuClick (event: React.MouseEvent<HTMLButtonElement>){
+setAnchorEl(event.currentTarget)
+  }
+
+  function handleClose(){
+    setAnchorEl(null);
+  }
+
   return (
     <AppBar position="static" sx={{ mb: 4 }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Container maxWidth="lg">
+
+      <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
 
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h6"> E-Commerce</Typography>
 
           <Stack direction="row">
             {links.map(link =>
@@ -62,13 +76,20 @@ export default function Header() {
 
           {
             user ? (
-              <Stack direction="row">
-                <Button sx={navStyles}> {user.name}</Button>
-                <Button sx={navStyles} onClick={() => {
+              <>
+                <Button id="user-button" onClick={handleMenuClick} endIcon={<KeyboardArrowDown/>} sx={navStyles}> {user.name}</Button>
+
+                <Menu id="user-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                  <MenuItem component={Link} to="/orders" >Orders</MenuItem>
+                  <MenuItem onClick={() => {
                   dispatch(logout())
                   dispatch(clearCart())
-                }}> Log Out</Button>
-              </Stack>
+                }} >Logout</MenuItem>
+                </Menu>
+
+
+
+              </>
             ) : (
               <Stack direction="row">
                 {authLinks.map(link =>
@@ -83,6 +104,8 @@ export default function Header() {
 
         </Box>
       </Toolbar>
+      </Container>
+
     </AppBar >
   );
 }

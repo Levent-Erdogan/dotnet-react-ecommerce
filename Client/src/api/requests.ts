@@ -6,9 +6,9 @@ import { store } from "../store/store";
 axios.defaults.baseURL = "http://localhost:5273/api/";
 axios.defaults.withCredentials = true;
 
-axios.interceptors.request.use(request =>{
+axios.interceptors.request.use(request => {
     const token = store.getState().account.user?.token;
-    if(token){
+    if (token) {
         request.headers.Authorization = `Bearer ${token}`;
     }
     return request;
@@ -80,8 +80,14 @@ const Account = {
     getUser: () => queries.get("account/getuser")
 }
 
+const Order = {
+    getOrders: () => queries.get("orders"),
+    getOrder: (id: number) => queries.get(`orders/${id}`),
+    createOrder : (formData:any) => queries.post("orders",formData)
+}
+
 const requests = {
-    Catalog, Errors, Cart, Account
+    Catalog, Errors, Cart, Account,Order
 }
 
 export default requests;
