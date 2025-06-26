@@ -19,13 +19,15 @@ namespace API.Entity
         public List<OrderItem> OrderItems { get; set; } = new();
         public decimal SubTotal { get; set; }
         public decimal DeliveryFree { get; set; }
+        public string? ConversationId { get; set; }
+        public string? BasketId { get; set; }
         public decimal GetTotal()
         {
             return SubTotal + DeliveryFree;
         }
 
     }
- 
+
     public class OrderItem
     {
         public int Id { get; set; }
@@ -37,6 +39,7 @@ namespace API.Entity
         public string ProductImage { get; set; } = null!;
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+
     }
 
 
